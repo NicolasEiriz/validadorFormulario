@@ -21,7 +21,13 @@ function validarFormulario(event){
     'descripcion-regalo': validarDescripcionRegalo(descripcionRegalo)
   }
   
-  manejarErrores(errores)
+  const formularioCorrecto = manejarErrores(errores) === 0
+
+  if(formularioCorrecto){
+    $form.className = 'oculto'
+    document.querySelector('#exito').className = ''
+    
+  }
   
   event.preventDefault()
 }
@@ -82,6 +88,7 @@ function manejarErrores(errores){
   const erroresKeys = Object.keys(errores)
   const listadoErrores = document.querySelector('#errores')
   listadoErrores.textContent = ''
+  let cantidadErrores = 0
 
   erroresKeys.forEach(campoError => {
     const descripcionError = errores[campoError]
@@ -90,12 +97,14 @@ function manejarErrores(errores){
       $form[campoError].className = 'error'
       const listaError = document.createElement('li')
       listaError.innerText = descripcionError
-
       listadoErrores.appendChild(listaError)
+      cantidadErrores++;
     }
     else{
       $form[campoError].className = ''
 
     }
   });
+
+  return cantidadErrores
 }
